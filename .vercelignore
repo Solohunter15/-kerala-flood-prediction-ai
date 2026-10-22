@@ -1,7 +1,11 @@
-# Ignore large dataset in Vercel function deployment (reduces bundle size)
+# Ignore local HTTP server from Vercel function bundle
+app.py
+create_map_assets.py
+
+# Ignore large raw CSV dataset
 kerala_flood_1lakh_unified.csv
 
-# Ignore documentation & design specs in serverless bundle
+# Ignore documentation & design specs
 ARCHITECTURE.md
 PRD.md
 RULES.md

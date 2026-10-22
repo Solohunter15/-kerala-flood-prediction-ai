@@ -1,0 +1,10 @@
+[project]
+name = "kerala-flood-prediction-ai"
+version = "1.0.0"
+description = "Kerala Flood Risk Prediction & Impact Analysis System"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+
+[tool.vercel]
+entrypoint = "api/predict.py"

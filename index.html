@@ -1170,12 +1170,13 @@
         .gauge-text-overlay {
             position: absolute; bottom: 4px; width: 100%; text-align: center;
         }
-        .gauge-val { font-size: 34px; font-weight: 800; color: #fff; line-height: 1; }
-        .gauge-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+        .gauge-val { font-size: 34px; font-weight: 800; color: #fff; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+        .gauge-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .risk-badge-tag {
-            padding: 4px 14px; border-radius: 9999px;
+            padding: 5px 16px; border-radius: 9999px;
             font-size: 12px; font-weight: 700; text-transform: uppercase;
-            display: inline-block; margin-top: 8px;
+            display: inline-block; margin-top: 8px; letter-spacing: 0.04em;
+            box-shadow: 0 0 14px rgba(0,0,0,0.3);
         }
         .kpi-header {
             display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
@@ -1185,23 +1186,29 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 16px;
         }
-        .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-        .kpi-val { font-size: 26px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 6px; }
-        .kpi-sub { font-size: 11px; display: flex; align-items: center; gap: 4px; }
+        .kpi-label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+        .kpi-val { font-size: 28px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 6px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+        .kpi-sub { font-size: 11px; display: flex; align-items: center; gap: 4px; font-weight: 600; }
 
-        /* Horizon Toggle Buttons */
+        /* Horizon Toggle Buttons (Power BI Pill Style) */
         .horizon-buttons {
-            display: flex; gap: 8px;
-            background: rgba(15, 23, 42, 0.7);
-            padding: 4px; border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.08);
+            display: flex; gap: 6px;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 5px; border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
         }
         .horizon-btn {
             background: transparent; border: none; color: var(--text-muted);
-            padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
-            cursor: pointer; transition: all 0.15s;
+            padding: 7px 16px; border-radius: 7px; font-size: 12px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .horizon-btn.active { background: #2563eb; color: #fff; }
+        .horizon-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
+        .horizon-btn.active {
+            background: linear-gradient(135deg, #0284c7, #06b6d4);
+            color: #fff;
+            box-shadow: 0 0 14px rgba(6, 182, 212, 0.45);
+        }
 
         /* Animated Liquid Tanks */
         .liquid-tank-meter {
@@ -4077,7 +4084,7 @@ class FloodAggregationReducer:
             }, 30);
         }
 
-        // Run Analysis Form Handler
+        // Run Analysis Form Handler (Zero-Lag Parallel Execution)
         async function submitFloodAnalysis(e) {
             e.preventDefault();
             const modal = document.getElementById("processing-modal");
@@ -4085,22 +4092,20 @@ class FloodAggregationReducer:
             const bar = document.getElementById("proc-bar");
             modal.style.display = "flex";
 
-            stageText.innerText = "1/4. Validating meteorological parameters & district baselines...";
-            bar.style.width = "25%";
-            await new Promise(r => setTimeout(r, 300));
+            stageText.innerText = "Processing hydrodynamic & SCS-CN risk algorithm...";
+            bar.style.width = "40%";
 
-            stageText.innerText = "2/4. Reading Hadoop Distributed File System splits (100,000 mock records)...";
-            bar.style.width = "55%";
-            await new Promise(r => setTimeout(r, 350));
+            // Run analysis immediately in parallel
+            const fetchPromise = fetchAnalysis(currentDistrict, true);
 
-            stageText.innerText = "3/4. Running MapReduce weighted risk prediction algorithm...";
-            bar.style.width = "80%";
+            // Fast micro-step visual transition
+            await new Promise(r => setTimeout(r, 100));
+            bar.style.width = "85%";
+            stageText.innerText = "Synthesizing Power BI telemetry & sector consequence visuals...";
 
-            await fetchAnalysis(currentDistrict, true);
-
-            stageText.innerText = "4/4. Generating multi-sector consequence & impact projections...";
+            await fetchPromise;
             bar.style.width = "100%";
-            await new Promise(r => setTimeout(r, 250));
+            await new Promise(r => setTimeout(r, 50));
 
             modal.style.display = "none";
             navigateTo("results");
@@ -5002,27 +5007,55 @@ class FloodAggregationReducer:
             setTimeout(() => { dossier.style.display = "none"; }, 1000);
         }
 
-        // SVG Interactive Charts
+        // SVG Interactive Charts (Power BI Gradient Area & Hydrograph Visuals)
         function renderTrendChart(svgId, labels, values, riskLevel = "Critical") {
             const svg = document.getElementById(svgId);
             if (!svg) return;
             const strokeColor = riskLevel === "Critical" ? "#ef4444" : riskLevel === "High" ? "#f97316" : riskLevel === "Moderate" ? "#facc15" : "#10b981";
+            const gradId = "grad_" + svgId;
             const width = 340;
-            const height = 120;
-            const points = values.map((val, i) => {
-                const x = 30 + (i * (width / (values.length - 1)));
-                const y = height - ((val / 100) * (height - 30)) - 10;
-                return `${x},${y}`;
-            }).join(" ");
+            const height = 110;
+            const paddingTop = 12;
+            const paddingBottom = 22;
+            const chartH = height - paddingTop - paddingBottom;
 
-            let html = `<polyline fill="none" stroke="${strokeColor}" stroke-width="2.5" points="${points}" style="stroke-dasharray: 400; stroke-dashoffset: 0; animation: cardSlideUp 1s ease;"/>`;
-            values.forEach((val, i) => {
-                const x = 30 + (i * (width / (values.length - 1)));
-                const y = height - ((val / 100) * (height - 30)) - 10;
+            const coords = values.map((val, i) => {
+                const x = 25 + (i * ((width - 45) / (values.length - 1)));
+                const y = paddingTop + chartH - ((val / 100) * chartH);
+                return { x, y, val, label: labels[i] };
+            });
+
+            const pointsStr = coords.map(c => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(" ");
+            const areaPoints = `${coords[0].x.toFixed(1)},${(paddingTop + chartH).toFixed(1)} ${pointsStr} ${coords[coords.length - 1].x.toFixed(1)},${(paddingTop + chartH).toFixed(1)}`;
+
+            let html = `
+                <defs>
+                    <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.38"/>
+                        <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
+                    </linearGradient>
+                </defs>
+                <!-- Power BI Threshold Gridlines -->
+                <line x1="25" y1="${paddingTop + (chartH * 0.25)}" x2="${width - 20}" y2="${paddingTop + (chartH * 0.25)}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
+                <line x1="25" y1="${paddingTop + (chartH * 0.50)}" x2="${width - 20}" y2="${paddingTop + (chartH * 0.50)}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
+                <line x1="25" y1="${paddingTop + (chartH * 0.75)}" x2="${width - 20}" y2="${paddingTop + (chartH * 0.75)}" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
+                <line x1="25" y1="${paddingTop + chartH}" x2="${width - 20}" y2="${paddingTop + chartH}" stroke="rgba(255,255,255,0.12)"/>
+                
+                <!-- Power BI Shaded Gradient Area -->
+                <polygon fill="url(#${gradId})" points="${areaPoints}" />
+                
+                <!-- Trend Polyline -->
+                <polyline fill="none" stroke="${strokeColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${pointsStr}" />
+            `;
+
+            coords.forEach((c, i) => {
+                const isLast = i === coords.length - 1;
                 html += `
-                    <circle class="chart-point-marker" cx="${x}" cy="${y}" r="4" fill="${strokeColor}" stroke="#fff" stroke-width="1.5"
-                            onmouseenter="showTooltip(event, '${labels[i]}', 'Risk Level: ${val}%')" onmouseleave="hideTooltip()" />
-                    <text x="${x}" y="${height + 15}" font-size="9" fill="#94a3b8" text-anchor="middle">${labels[i]}</text>
+                    <circle class="chart-point-marker" cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${isLast ? 5 : 3.5}" 
+                            fill="${isLast ? '#fff' : strokeColor}" stroke="${strokeColor}" stroke-width="${isLast ? 3 : 1.5}"
+                            onmouseenter="showTooltip(event, '${c.label}', 'Risk Probability: ${c.val}%')" onmouseleave="hideTooltip()" 
+                            style="${isLast ? 'filter: drop-shadow(0 0 6px ' + strokeColor + ');' : ''}"/>
+                    <text x="${c.x.toFixed(1)}" y="${height - 2}" font-size="9" font-weight="600" fill="#94a3b8" text-anchor="middle">${c.label}</text>
                 `;
             });
             svg.innerHTML = html;
@@ -5034,16 +5067,32 @@ class FloodAggregationReducer:
             const minV = Math.min(...values);
             const maxV = Math.max(...values);
             const range = Math.max(0.1, maxV - minV);
-            
-            const points = values.map((v, i) => {
-                const x = 10 + (i * (180 / (values.length - 1)));
-                const y = 70 - (((v - minV) / range) * 55);
-                return `${x},${y}`;
-            }).join(" ");
+            const w = 180;
+            const h = 75;
+            const padY = 10;
+            const chartH = h - padY * 2;
+            const gradId = "spk_grad_" + svgId;
+
+            const coords = values.map((v, i) => {
+                const x = 10 + (i * ((w - 20) / (values.length - 1)));
+                const y = padY + chartH - (((v - minV) / range) * chartH);
+                return { x, y, v };
+            });
+
+            const points = coords.map(c => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(" ");
+            const areaPoints = `${coords[0].x.toFixed(1)},${(padY + chartH).toFixed(1)} ${points} ${coords[coords.length - 1].x.toFixed(1)},${(padY + chartH).toFixed(1)}`;
+            const last = coords[coords.length - 1];
 
             svg.innerHTML = `
-                <polyline fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" points="${points}" />
-                <circle cx="${points.split(' ').pop().split(',')[0]}" cy="${points.split(' ').pop().split(',')[1]}" r="4" fill="${color}" stroke="#fff" stroke-width="1.5" />
+                <defs>
+                    <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="${color}" stop-opacity="0.32"/>
+                        <stop offset="100%" stop-color="${color}" stop-opacity="0.0"/>
+                    </linearGradient>
+                </defs>
+                <polygon fill="url(#${gradId})" points="${areaPoints}" />
+                <polyline fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${points}" />
+                <circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="4" fill="#fff" stroke="${color}" stroke-width="2" style="filter: drop-shadow(0 0 5px ${color});" />
             `;
         }
 

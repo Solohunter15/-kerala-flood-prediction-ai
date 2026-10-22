@@ -131,5 +131,10 @@ def run_server():
         print("\n[*] Shutting down...")
         httpd.server_close()
 
+# Top-level serverless entry point exports for Vercel and WSGI compat
+handler = FloodAIRequestHandler
+app = FloodAIRequestHandler
+application = FloodAIRequestHandler
+
 if __name__ == "__main__":
     run_server()

@@ -54,7 +54,7 @@ class handler(BaseHTTPRequestHandler):
             path = "/"
 
         # 1. API: Supported Districts
-        if path == "/api/districts":
+        if path in ["/api/districts", "/api/districts.py"]:
             self._set_headers(200, "application/json")
             districts = FloodRiskEngine.get_supported_districts()
             self.wfile.write(json.dumps({"districts": districts}).encode("utf-8"))
@@ -74,8 +74,8 @@ class handler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"status": "summary_unavailable"}).encode("utf-8"))
             return
 
-        # 3. API: Status/Health Info (only if explicitly hitting /api or /api/status)
-        if path in ["/api", "/api/status"]:
+        # 3. API: Status/Health Info (only if explicitly hitting /api, /api/status, or GET /api/predict)
+        if path in ["/api", "/api/status", "/api/predict", "/api/predict.py"]:
             self._set_headers(200, "application/json")
             self.wfile.write(json.dumps({
                 "status": "online",
@@ -106,10 +106,10 @@ class handler(BaseHTTPRequestHandler):
                 self.send_error(404, "Asset not found")
                 return
 
-        # 5. Direct static files at root (e.g. kerala_district_hadoop_summary.json)
+        # 5. Direct static files at root (e.g. kerala_district_hadoop_summary.json, favicon.ico) - excluding sensitive py code
         direct_candidate = os.path.join(ROOT_DIR, path.lstrip("/").replace("/", os.sep))
-        if path != "/" and os.path.exists(direct_candidate) and os.path.isfile(direct_candidate):
-            ext = os.path.splitext(direct_candidate)[1].lower()
+        ext = os.path.splitext(direct_candidate)[1].lower()
+        if path != "/" and ext not in [".py", ".pyc", ".env"] and os.path.exists(direct_candidate) and os.path.isfile(direct_candidate):
             ct = MIME_TYPES.get(ext, "application/octet-stream")
             with open(direct_candidate, "rb") as f:
                 content = f.read()

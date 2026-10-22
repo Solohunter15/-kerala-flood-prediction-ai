@@ -1,0 +1,9 @@
+# Ignore large dataset in Vercel function deployment (reduces bundle size)
+kerala_flood_1lakh_unified.csv
+
+# Ignore documentation & design specs in serverless bundle
+ARCHITECTURE.md
+PRD.md
+RULES.md
+UI_UX.md
+MEMORY.md

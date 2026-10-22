@@ -22,6 +22,15 @@ class handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         self._set_headers(200)
 
+    def do_GET(self):
+        self._set_headers(200, "application/json")
+        self.wfile.write(json.dumps({
+            "status": "online",
+            "service": "Kerala Flood Risk Prediction API",
+            "method": "POST to /api/predict",
+            "supported_districts": FloodRiskEngine.get_supported_districts()
+        }).encode("utf-8"))
+
     def do_POST(self):
         try:
             content_length = int(self.headers.get("Content-Length", 0))
@@ -30,14 +39,14 @@ class handler(BaseHTTPRequestHandler):
             
             result = FloodRiskEngine.evaluate_comprehensive(
                 district_name=params.get("district", "Wayanad"),
-                rainfall_mm=float(params.get("rainfall_amount", 250.0)),
-                rainfall_duration_hrs=float(params.get("rainfall_duration", 24.0)),
-                soil_moisture_pct=float(params.get("soil_moisture", 80.0)),
+                rainfall_mm=params.get("rainfall_amount", 250.0),
+                rainfall_duration_hrs=params.get("rainfall_duration", 24.0),
+                soil_moisture_pct=params.get("soil_moisture", 80.0),
                 selected_taluks=params.get("selected_taluks", None),
-                historical_flood_freq=int(params.get("historical_freq", 5)),
-                current_water_level_m=float(params.get("current_water_level", 2.8)),
-                temperature_c=float(params.get("temperature", 28.0)),
-                wind_speed_kmh=float(params.get("wind_speed", 15.0)),
+                historical_flood_freq=params.get("historical_freq", 5),
+                current_water_level_m=params.get("current_water_level", 2.8),
+                temperature_c=params.get("temperature", 28.0),
+                wind_speed_kmh=params.get("wind_speed", 15.0),
                 horizon=params.get("horizon", "1_hour")
             )
             

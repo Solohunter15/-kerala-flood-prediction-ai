@@ -229,6 +229,45 @@ class FloodRiskEngine:
         pop_base = profile["population_base"]
         all_taluks = profile.get("taluks", [])
 
+        # Strict input sanitization & boundary enforcement
+        try:
+            rainfall_mm = max(0.0, min(1000.0, float(rainfall_mm)))
+        except (TypeError, ValueError):
+            rainfall_mm = 250.0
+
+        try:
+            rainfall_duration_hrs = max(0.5, min(168.0, float(rainfall_duration_hrs)))
+        except (TypeError, ValueError):
+            rainfall_duration_hrs = 24.0
+
+        try:
+            soil_moisture_pct = max(0.0, min(100.0, float(soil_moisture_pct)))
+        except (TypeError, ValueError):
+            soil_moisture_pct = 80.0
+
+        try:
+            historical_flood_freq = max(0, min(10, int(historical_flood_freq)))
+        except (TypeError, ValueError):
+            historical_flood_freq = 5
+
+        try:
+            current_water_level_m = max(0.0, min(15.0, float(current_water_level_m)))
+        except (TypeError, ValueError):
+            current_water_level_m = 2.8
+
+        try:
+            temperature_c = max(-10.0, min(55.0, float(temperature_c)))
+        except (TypeError, ValueError):
+            temperature_c = 28.0
+
+        try:
+            wind_speed_kmh = max(0.0, min(150.0, float(wind_speed_kmh)))
+        except (TypeError, ValueError):
+            wind_speed_kmh = 15.0
+
+        if horizon not in ["30_min", "1_hour", "6_hour"]:
+            horizon = "1_hour"
+
         # Validate and sanitize selected taluks
         if not selected_taluks or not isinstance(selected_taluks, list) or len(selected_taluks) == 0:
             selected_taluks = list(all_taluks)
@@ -756,8 +795,19 @@ class FloodRiskEngine:
                         "hazard": TALUK_VULNERABILITY_INDEX.get(t, {}).get("hazard", "Catchment Runoff"),
                         "hazard_type": TALUK_VULNERABILITY_INDEX.get(t, {}).get("hazard", "Catchment Runoff"),
                         "elevation": f"{TALUK_VULNERABILITY_INDEX.get(t, {}).get('elev', 25.0):+.0f}m ASL",
-                        "vuln_rating": "Critical" if (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.0) >= 1.45 or risk_score_int >= 75) else "High" if (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.0) >= 1.25 or risk_score_int >= 58) else "Moderate",
-                        "risk_level": "Critical" if (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.0) >= 1.45 or risk_score_int >= 75) else "High" if (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.0) >= 1.25 or risk_score_int >= 58) else "Moderate",
+                        "vuln_rating": (
+                            "Critical" if min(99, max(5, int(round(final_risk * (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.20) / max(0.8, taluk_avg_weight)))))) >= 75
+                            else "High" if min(99, max(5, int(round(final_risk * (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.20) / max(0.8, taluk_avg_weight)))))) >= 58
+                            else "Moderate" if min(99, max(5, int(round(final_risk * (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.20) / max(0.8, taluk_avg_weight)))))) >= 38
+                            else "Low"
+                        ),
+                        "risk_level": (
+                            "Critical" if min(99, max(5, int(round(final_risk * (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.20) / max(0.8, taluk_avg_weight)))))) >= 75
+                            else "High" if min(99, max(5, int(round(final_risk * (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.20) / max(0.8, taluk_avg_weight)))))) >= 58
+                            else "Moderate" if min(99, max(5, int(round(final_risk * (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.20) / max(0.8, taluk_avg_weight)))))) >= 38
+                            else "Low"
+                        ),
+                        "risk_score": min(99, max(5, int(round(final_risk * (TALUK_VULNERABILITY_INDEX.get(t, {}).get("weight", 1.20) / max(0.8, taluk_avg_weight)))))),
                         "action": (
                             "Mandatory slope evacuation & emergency camp activation" if "Debris" in TALUK_VULNERABILITY_INDEX.get(t, {}).get("hazard", "") or "Landslide" in TALUK_VULNERABILITY_INDEX.get(t, {}).get("hazard", "")
                             else "Delta pumping deployment & Kuttanad bund barrier reinforcement" if "Below-Sea-Level" in TALUK_VULNERABILITY_INDEX.get(t, {}).get("hazard", "") or "Polder" in TALUK_VULNERABILITY_INDEX.get(t, {}).get("hazard", "")

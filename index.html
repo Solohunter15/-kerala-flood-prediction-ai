@@ -779,25 +779,86 @@
             backdrop-filter: blur(14px);
         }
         
+        /* 14-District Interactive Quick Selection Bar */
+        .district-pills-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 4px 2px 10px 2px;
+            width: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(56, 189, 248, 0.4) transparent;
+            margin-bottom: 8px;
+        }
+        .district-pills-bar::-webkit-scrollbar {
+            height: 4px;
+        }
+        .district-pills-bar::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.35);
+            border-radius: 4px;
+        }
+        .dist-pill-btn {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #cbd5e1;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+        .dist-pill-btn:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(56, 189, 248, 0.5);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        .dist-pill-btn.active {
+            background: rgba(6, 182, 212, 0.24);
+            border-color: var(--cyan);
+            color: #ffffff;
+            box-shadow: 0 0 14px rgba(6, 182, 212, 0.45);
+            font-weight: 700;
+        }
+        .dist-pill-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #64748b;
+        }
+        .dist-pill-btn.active .dist-pill-dot {
+            background: var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
+            animation: beaconPulse 1.8s infinite;
+        }
+
         /* 3D WebGL Kerala Interactive Model Viewport & Controls */
-        .kerala-3d-wrapper {
+        .kerala-3d-wrapper, .results-3d-wrapper {
             position: relative;
             width: 100%;
             height: 560px;
-            margin: 8px 0;
+            margin: 6px 0 10px 0;
             border-radius: 16px;
             overflow: hidden;
-            border: 1px solid rgba(56, 189, 248, 0.28);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), inset 0 0 40px rgba(0, 240, 255, 0.04);
-            background: radial-gradient(circle at 50% 35%, #0e1d38 0%, #060b18 85%);
+            border: 1px solid rgba(56, 189, 248, 0.32);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), inset 0 0 50px rgba(0, 240, 255, 0.05);
+            background: radial-gradient(circle at 50% 35%, #0d1e3a 0%, #050a16 85%);
         }
-        #kerala-3d-viewport {
+        #kerala-3d-viewport, #results-3d-viewport {
             width: 100%;
             height: 100%;
             cursor: grab;
             display: block;
+            outline: none;
         }
-        #kerala-3d-viewport:active {
+        #kerala-3d-viewport:active, #results-3d-viewport:active {
             cursor: grabbing;
         }
 
@@ -806,8 +867,8 @@
             position: absolute;
             top: 14px;
             left: 14px;
-            background: rgba(7, 12, 24, 0.88);
-            border: 1px solid rgba(0, 240, 255, 0.35);
+            background: rgba(7, 12, 24, 0.90);
+            border: 1px solid rgba(0, 240, 255, 0.38);
             backdrop-filter: blur(12px);
             padding: 10px 14px;
             border-radius: 10px;
@@ -845,7 +906,7 @@
             margin-top: 4px;
         }
 
-        /* 3D Action Controls (Reset, Auto-Rotate, Perspective) */
+        /* 3D Action Controls (Reset, Auto-Rotate, Perspective, Zoom) */
         .kerala-3d-controls {
             position: absolute;
             top: 14px;
@@ -855,8 +916,8 @@
             z-index: 10;
         }
         .btn-3d-ctrl {
-            background: rgba(13, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(13, 23, 42, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             color: var(--text-main);
             padding: 6px 10px;
             border-radius: 8px;
@@ -868,6 +929,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            user-select: none;
         }
         .btn-3d-ctrl:hover {
             border-color: var(--cyan);
@@ -876,8 +938,34 @@
             transform: translateY(-1px);
         }
         .btn-3d-ctrl.active {
-            background: rgba(0, 240, 255, 0.18);
+            background: rgba(0, 240, 255, 0.20);
             border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        /* 3D Scroll and Interaction Hint */
+        .kerala-3d-scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(8, 14, 28, 0.88);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 10px;
+            color: #94a3b8;
+            pointer-events: none;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+        }
+        .kerala-3d-scroll-hint strong {
             color: var(--cyan);
         }
 
@@ -890,7 +978,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(7, 12, 24, 0.75);
+            background: rgba(7, 12, 24, 0.80);
             border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(8px);
             padding: 6px 14px;
@@ -1151,7 +1239,7 @@
         }
         .grid-impact-row1 {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -1792,6 +1880,11 @@
                         </select>
                     </div>
 
+                    <!-- 14-District Interactive Quick Selection Bar -->
+                    <div class="district-pills-bar" id="district-pills-bar">
+                        <!-- Populated dynamically with all 14 Kerala districts -->
+                    </div>
+
                     <!-- 3D Three.js Model Container -->
                     <div class="kerala-3d-wrapper">
                         <div id="kerala-3d-viewport"></div>
@@ -1805,15 +1898,22 @@
 
                         <!-- 3D Camera & Orbit Controls -->
                         <div class="kerala-3d-controls">
-                            <button type="button" class="btn-3d-ctrl" onclick="reset3DCamera()" title="Reset Camera">🔄 Reset</button>
-                            <button type="button" class="btn-3d-ctrl active" id="btn-toggle-orbit" onclick="toggle3DAutoRotate()" title="Toggle Auto-Rotate">🛰️ Orbit: ON</button>
+                            <button type="button" class="btn-3d-ctrl" onclick="zoom3DIn()" title="Zoom In (or Ctrl+Scroll)">🔍+ In</button>
+                            <button type="button" class="btn-3d-ctrl" onclick="zoom3DOut()" title="Zoom Out (or Ctrl+Scroll)">🔍− Out</button>
+                            <button type="button" class="btn-3d-ctrl" onclick="reset3DCamera()" title="Reset Camera View">🔄 Reset</button>
+                            <button type="button" class="btn-3d-ctrl" id="btn-toggle-orbit" onclick="toggle3DAutoRotate()" title="Toggle Auto-Rotate">🛰️ Orbit: OFF</button>
                             <button type="button" class="btn-3d-ctrl" id="btn-toggle-angle" onclick="toggle3DTopView()" title="Top View / 3D Tilt">📐 3D Tilt</button>
+                        </div>
+
+                        <!-- 3D Scroll and Interaction Hint -->
+                        <div class="kerala-3d-scroll-hint">
+                            <span>💡 Scroll page naturally • Click district or pill • Use <strong>🔍+ / 🔍−</strong> to zoom</span>
                         </div>
 
                         <!-- 3D Elevation Legend -->
                         <div class="kerala-3d-legend">
                             <div class="legend-pill"><span class="legend-dot" style="background:#00f0ff; box-shadow:0 0 8px #00f0ff;"></span> Selected</div>
-                            <div class="legend-pill"><span class="legend-dot" style="background:#a855f7;"></span> Ghats Highlands</div>
+                            <div class="legend-pill"><span class="legend-dot" style="background:#10b981;"></span> Highlands</div>
                             <div class="legend-pill"><span class="legend-dot" style="background:#38bdf8;"></span> Coastal Delta</div>
                         </div>
                     </div>
@@ -2090,8 +2190,10 @@
                             </div>
                         </div>
                         <div class="kerala-3d-controls" style="position: static; margin-top: 0;">
+                            <button type="button" class="btn-3d-ctrl" onclick="zoomResultsIn()" title="Zoom In (or Ctrl+Scroll)">🔍+ In</button>
+                            <button type="button" class="btn-3d-ctrl" onclick="zoomResultsOut()" title="Zoom Out (or Ctrl+Scroll)">🔍− Out</button>
                             <button type="button" class="btn-3d-ctrl" onclick="focusResultsDistrict()">🎯 Focus <span id="btn-focus-dist-name">Wayanad</span></button>
-                            <button type="button" class="btn-3d-ctrl active" id="btn-results-orbit" onclick="toggleResultsOrbit()">🛰️ Auto-Rotate: ON</button>
+                            <button type="button" class="btn-3d-ctrl" id="btn-results-orbit" onclick="toggleResultsOrbit()">🛰️ Auto-Rotate: OFF</button>
                             <button type="button" class="btn-3d-ctrl" onclick="resetResultsCamera()">🔄 Reset View</button>
                         </div>
                     </div>
@@ -2105,6 +2207,11 @@
                             <div class="hud-dist-name" id="results-hud-title">Wayanad Active Basin</div>
                             <div class="hud-dist-meta" id="results-hud-meta">Simulated Inundation: Elevated Wave Active</div>
                             <div class="hud-dist-hint" id="results-hud-hint">Hover over any district to inspect regional exposure</div>
+                        </div>
+
+                        <!-- 3D Scroll and Interaction Hint -->
+                        <div class="kerala-3d-scroll-hint" style="bottom: 50px;">
+                            <span>💡 Scroll page naturally • Hover or click to inspect district • Use <strong>🔍+ / 🔍−</strong> to zoom</span>
                         </div>
 
                         <!-- Floating 3D Inundation Legend -->
@@ -2216,11 +2323,6 @@
                         <div class="kpi-header"><div class="kpi-icon" style="background: rgba(239,68,68,0.15); color: var(--red);">👥</div><span class="kpi-label">People Affected</span></div>
                         <div class="kpi-val" id="s3-kpi-people">0</div>
                         <div class="kpi-sub" style="color: var(--red);">↑ 32% rise</div>
-                    </div>
-                    <div class="card-glass">
-                        <div class="kpi-header"><div class="kpi-icon" style="background: rgba(168,85,247,0.15); color: var(--violet);">🏢</div><span class="kpi-label">Critical Locations</span></div>
-                        <div class="kpi-val" id="s3-kpi-crit">0</div>
-                        <div class="kpi-sub" style="color: var(--violet);">↑ 18%</div>
                     </div>
                     <div class="card-glass">
                         <div class="kpi-header"><div class="kpi-icon" style="background: rgba(16,185,129,0.15); color: var(--green);">🌾</div><span class="kpi-label">Affected Agriculture</span></div>
@@ -2667,20 +2769,26 @@
         // -----------------------------------------------------------------
         // 3D KERALA WEBGL SCENE (Three.js Extruded Topography & Raycasting)
         // -----------------------------------------------------------------
-        let scene3D, camera3D, renderer3D, controls3D, keralaGroup3D;
+        let scene3D, camera3D, renderer3D, controls3D, keralaGroup3D, basePedestalMesh;
         let districtMeshes = {};
+        let districtTopColliders = [];
         let districtLabelSprites = {};
         let beaconMesh = null;
         let hoveredDistrict = null;
-        let isAutoRotating = true;
+        let isAutoRotating = false; // Orbit starts OFF by default for stable targeting
         let isTopView = false;
         let raycaster3D = null;
         let mouse3D = null;
         let threeInitialized = false;
 
+        // Pointer drag vs click disambiguation for Primary 3D Viewport
+        let pointerDownPos = { x: 0, y: 0, time: 0 };
+        let isPointerDragging = false;
+
         // Results Page 3D Multi-District Heatmap Scene
         let resultsScene3D, resultsCamera3D, resultsRenderer3D, resultsControls3D, resultsKeralaGroup3D;
         let resultsDistrictMeshes = {};
+        let resultsTopColliders = [];
         let resultsLabelSprites = {};
         let resultsFloodWaveMesh = null;
         let resultsBeaconMesh = null;
@@ -2688,8 +2796,19 @@
         let resultsMouse3D = null;
         let results3DInitialized = false;
         let resultsHoveredDistrict = null;
-        let resultsIsAutoRotating = true;
+        let resultsIsAutoRotating = false; // Results auto-rotate starts OFF by default
         let resultsActiveDistrict = "Wayanad";
+
+        // Pointer drag vs click disambiguation for Results 3D Viewport
+        let resultsPointerDownPos = { x: 0, y: 0, time: 0 };
+        let resultsIsDragging = false;
+
+        // 14 Kerala Districts in geographic order (North to South)
+        const KERALA_DISTRICTS_LIST = [
+            "Kasaragod", "Kannur", "Wayanad", "Kozhikode", "Malappuram", 
+            "Palakkad", "Thrissur", "Ernakulam", "Idukki", "Kottayam", 
+            "Alappuzha", "Pathanamthitta", "Kollam", "Thiruvananthapuram"
+        ];
 
         // Topographic Extrusions based on authentic Kerala relief
         const DISTRICT_ELEVATIONS = {
@@ -2709,7 +2828,8 @@
             "Alappuzha": 4.0           // Kuttanad delta (below sea level)
         };
 
-        // Calibrated 2D boundary polygons for 3D extrusion in Three.js space
+        // Calibrated closed 2D boundary polygons for seamless 3D extrusion in Three.js space
+        // These matching boundary vertices ensure 100% gapless, non-overlapping borders
         const DISTRICT_POLYGONS = {
             "Kasaragod": [
                 [-52, 94], [-40, 106], [-30, 102], [-32, 86], [-46, 80], [-52, 94]
@@ -2759,27 +2879,114 @@
             const pts = DISTRICT_POLYGONS[name];
             if (!pts || pts.length === 0) return { x: 0, y: 0 };
             let sumX = 0, sumY = 0;
-            for (let i = 0; i < pts.length; i++) {
+            const n = pts.length - 1; // last point repeats first
+            for (let i = 0; i < n; i++) {
                 sumX += pts[i][0];
                 sumY += pts[i][1];
             }
-            return { x: sumX / pts.length, y: sumY / pts.length };
+            return { x: sumX / n, y: sumY / n };
         }
 
-        // Floating 3D Billboard Sprite Generator for District Labels
-        function createDistrictLabelSprite(name, subtitle = "") {
+        // Initialize 14-District Interactive Quick Selection Pills Bar
+        function initDistrictPills() {
+            const bar = document.getElementById("district-pills-bar");
+            if (!bar) return;
+            bar.innerHTML = KERALA_DISTRICTS_LIST.map(d => `
+                <button type="button" class="dist-pill-btn ${d === currentDistrict ? 'active' : ''}" id="pill-${d}" onclick="selectDistrict('${d}')">
+                    <span class="dist-pill-dot"></span>
+                    ${d}
+                </button>
+            `).join("");
+        }
+
+        function updateDistrictPills(distName) {
+            document.querySelectorAll(".dist-pill-btn").forEach(btn => {
+                btn.classList.remove("active");
+            });
+            const activePill = document.getElementById(`pill-${distName}`);
+            if (activePill) {
+                activePill.classList.add("active");
+                activePill.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+            }
+        }
+
+        // Authentic Topographic & Biome Colors of Kerala
+        const REAL_KERALA_COLORS = {
+            "Idukki": 0x184724,            // Deep Western Ghats Rainforest & Anamudi Ridge (2,695m)
+            "Wayanad": 0x1e5328,           // High Forested Plateau & Chembra Peak (1,100m)
+            "Pathanamthitta": 0x225c2d,    // Forested Highlands & Sabarimala Catchment
+            "Palakkad": 0x3b7235,          // Palakkad Gap Valley & Agricultural Plains
+            "Kottayam": 0x28803e,          // Midland Rolling Hills & Spice / Rubber Plantations
+            "Thrissur": 0x278746,          // Midland Lowlands & Kole Wetlands
+            "Malappuram": 0x2e8642,        // Mid-River Valleys & Kadalundi Basin
+            "Kozhikode": 0x1f844a,         // Coastal Midland & Coconut Lagoons
+            "Kannur": 0x268947,            // North Midland Terraces & Valapattanam Basin
+            "Kasaragod": 0x2d8c4e,         // North Coastal Littoral & Chandragiri Basin
+            "Kollam": 0x1b7e47,            // Ashtamudi Estuary & Coastal Plain
+            "Ernakulam": 0x158356,         // Periyar Delta & Coastal Urban Center
+            "Alappuzha": 0x0f885a,         // Kuttanad Delta (-2m ASL) & Vembanad Backwaters
+            "Thiruvananthapuram": 0x23753a // Agasthyamalai Biosphere to Arabian Sea Coast
+        };
+
+        // Procedural High-Definition Topographic Texture Generator
+        // Adds subtle elevation isobaths and gentle shading gradients for authentic cartographic relief
+        function createTopographicTexture(name, baseColorHex) {
             const canvas = document.createElement("canvas");
             canvas.width = 256;
-            canvas.height = 76;
+            canvas.height = 256;
             const ctx = canvas.getContext("2d");
 
-            // Rounded capsule background
-            ctx.fillStyle = "rgba(7, 14, 28, 0.85)";
-            ctx.strokeStyle = "rgba(0, 240, 255, 0.70)";
-            ctx.lineWidth = 2.5;
+            const col = new THREE.Color(baseColorHex);
+            const lightCol = col.clone().offsetHSL(0.02, 0.08, 0.12).getStyle();
+            const darkCol = col.clone().offsetHSL(-0.02, 0.05, -0.10).getStyle();
 
-            const r = 14;
-            const x = 4, y = 4, w = 248, h = 68;
+            // Gradient: West (coastal glow) to East (Ghats mountain wall)
+            const grad = ctx.createLinearGradient(0, 128, 256, 128);
+            grad.addColorStop(0, lightCol);
+            grad.addColorStop(0.55, col.getStyle());
+            grad.addColorStop(1, darkCol);
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 256, 256);
+
+            // Subtle topographic contour rings (isobaths)
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.10)";
+            ctx.lineWidth = 1.6;
+            for (let r = 24; r <= 118; r += 26) {
+                ctx.beginPath();
+                ctx.ellipse(140, 130, r * 1.08, r * 0.72, Math.PI / 5.5, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Delicate cyber cartographic micro-grid
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.05)";
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 256; i += 32) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0); ctx.lineTo(i, 256);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i); ctx.lineTo(256, i);
+                ctx.stroke();
+            }
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.wrapS = THREE.ClampToEdgeWrapping;
+            texture.wrapT = THREE.ClampToEdgeWrapping;
+            return texture;
+        }
+
+        // Floating 3D Billboard Sprite Generator with High-DPI Canvas
+        function createDistrictLabelSprite(name, subtitle = "") {
+            const canvas = document.createElement("canvas");
+            canvas.width = 380;
+            canvas.height = 110;
+            const ctx = canvas.getContext("2d");
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Capsule Container
+            const r = 22;
+            const x = 6, y = 6, w = 368, h = 98;
             ctx.beginPath();
             ctx.moveTo(x + r, y);
             ctx.lineTo(x + w - r, y);
@@ -2791,21 +2998,25 @@
             ctx.lineTo(x, y + r);
             ctx.quadraticCurveTo(x, y, x + r, y);
             ctx.closePath();
+
+            ctx.fillStyle = "rgba(8, 16, 32, 0.92)";
             ctx.fill();
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.85)";
+            ctx.lineWidth = 3.5;
             ctx.stroke();
 
             // District Name
             ctx.fillStyle = "#ffffff";
-            ctx.font = "bold 23px 'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+            ctx.font = "bold 32px 'Inter', -apple-system, sans-serif";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(name, 128, subtitle ? 28 : 38);
+            ctx.fillText(name, 190, subtitle ? 40 : 55);
 
-            // Subtitle (Elevation or Risk Level)
+            // Subtitle
             if (subtitle) {
-                ctx.fillStyle = "#00f0ff";
-                ctx.font = "600 13px 'Inter', monospace";
-                ctx.fillText(subtitle, 128, 52);
+                ctx.fillStyle = "#38bdf8";
+                ctx.font = "600 17px 'Inter', monospace";
+                ctx.fillText(subtitle, 190, 75);
             }
 
             const texture = new THREE.CanvasTexture(canvas);
@@ -2814,44 +3025,56 @@
                 map: texture,
                 transparent: true,
                 depthTest: false,
-                opacity: 0.95
+                opacity: 0.96
             });
             const sprite = new THREE.Sprite(spriteMat);
-            sprite.scale.set(13, 3.86, 1);
+            sprite.scale.set(15, 4.35, 1);
+            sprite.userData = { district: name, isLabel: true };
             return sprite;
         }
 
-        // Authentic Topographic & Biome Colors of Kerala
-        const REAL_KERALA_COLORS = {
-            "Idukki": 0x1b4323,            // Deep Western Ghats Rainforest & Anamudi Ridge (2,695m)
-            "Wayanad": 0x22512a,           // High Forested Plateau & Chembra Peak (1,100m)
-            "Pathanamthitta": 0x27572d,    // Forested Highlands & Sabarimala Catchment
-            "Palakkad": 0x3a6e35,          // Palakkad Gap Valley & Agricultural Plains
-            "Kottayam": 0x2b7c3c,          // Midland Rolling Hills & Spice / Rubber Plantations
-            "Thrissur": 0x2e8344,          // Midland Lowlands & Kole Wetlands
-            "Malappuram": 0x30843f,        // Mid-River Valleys & Kadalundi Basin
-            "Kozhikode": 0x268149,         // Coastal Midland & Coconut Lagoons
-            "Kannur": 0x2c8645,            // North Midland Terraces & Valapattanam Basin
-            "Kasaragod": 0x31894d,         // North Coastal Littoral & Chandragiri Basin
-            "Kollam": 0x1d7c45,            // Ashtamudi Estuary & Coastal Plain
-            "Ernakulam": 0x198154,         // Periyar Delta & Coastal Urban Center
-            "Alappuzha": 0x128458,         // Kuttanad Delta (-2m ASL) & Vembanad Backwaters
-            "Thiruvananthapuram": 0x266f38 // Agasthyamalai Biosphere to Arabian Sea Coast
-        };
+        // Circular Tactical Radar Platter with Distance Range Rings
+        function createTacticalPedestal(scene) {
+            const group = new THREE.Group();
+            group.position.set(0, 5, -2.4);
 
-        // Smooth Curvilinear Polygon Generator using Catmull-Rom Resampling
-        function getSmoothPolygonPoints(pts, divisions = 5) {
-            if (!pts || pts.length < 3) return pts;
-            const vPoints = pts.map(p => new THREE.Vector3(p[0], p[1], 0));
-            if (vPoints[0].distanceTo(vPoints[vPoints.length - 1]) > 0.05) {
-                vPoints.push(vPoints[0].clone());
-            }
-            const curve = new THREE.CatmullRomCurve3(vPoints, true, 'centripetal', 0.22);
-            const smoothVecs = curve.getPoints(pts.length * divisions);
-            return smoothVecs.map(v => [v.x, v.y]);
+            // Outer Base Disc
+            const baseGeom = new THREE.CircleGeometry(175, 64);
+            const baseMat = new THREE.MeshBasicMaterial({
+                color: 0x060e1c,
+                transparent: true,
+                opacity: 0.75,
+                depthWrite: false
+            });
+            const baseMesh = new THREE.Mesh(baseGeom, baseMat);
+            group.add(baseMesh);
+
+            // Concentric Range Rings (50km, 100km, 150km, 200km scale)
+            const ringRadii = [45, 90, 135, 172];
+            ringRadii.forEach((r, idx) => {
+                const ringGeom = new THREE.RingGeometry(r - 0.4, r + 0.4, 64);
+                const ringMat = new THREE.MeshBasicMaterial({
+                    color: 0x38bdf8,
+                    transparent: true,
+                    opacity: 0.12 + idx * 0.04,
+                    side: THREE.DoubleSide
+                });
+                const ring = new THREE.Mesh(ringGeom, ringMat);
+                group.add(ring);
+            });
+
+            // Cardinal Crosshairs
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.18 });
+            const ptsX = [new THREE.Vector3(-170, 0, 0.1), new THREE.Vector3(170, 0, 0.1)];
+            const ptsY = [new THREE.Vector3(0, -170, 0.1), new THREE.Vector3(0, 170, 0.1)];
+            group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(ptsX), lineMat));
+            group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(ptsY), lineMat));
+
+            scene.add(group);
+            return group;
         }
 
-        // Arabian Sea Shelf & Coastline Geometry for authentic geographical setting
+        // Arabian Sea Shelf & Coastline Geometry with Specular Depth
         function createArabianSea(scene) {
             const seaShape = new THREE.Shape();
             seaShape.moveTo(-160, 130);
@@ -2869,20 +3092,20 @@
 
             const seaGeom = new THREE.ShapeGeometry(seaShape);
             const seaMat = new THREE.MeshStandardMaterial({
-                color: 0x072d54,
-                roughness: 0.15,
-                metalness: 0.65,
+                color: 0x062846,
+                roughness: 0.18,
+                metalness: 0.72,
                 transparent: true,
                 opacity: 0.88,
-                emissive: 0x031b34,
-                emissiveIntensity: 0.4
+                emissive: 0x021626,
+                emissiveIntensity: 0.45
             });
             const seaMesh = new THREE.Mesh(seaGeom, seaMat);
             seaMesh.position.z = -1.2;
             seaMesh.name = "ArabianSeaMesh";
             scene.add(seaMesh);
 
-            // Shimmering Turquoise Surf Line along Kerala's West Coast
+            // Shimmering Turquoise Surf Line along Kerala's Coastline
             const surfPoints = [
                 new THREE.Vector3(-34, 130, 0.4),
                 new THREE.Vector3(-52, 92, 0.4),
@@ -2895,11 +3118,11 @@
                 new THREE.Vector3(3, -120, 0.4)
             ];
             const surfCurve = new THREE.CatmullRomCurve3(surfPoints);
-            const surfGeom = new THREE.TubeGeometry(surfCurve, 54, 0.75, 8, false);
+            const surfGeom = new THREE.TubeGeometry(surfCurve, 54, 0.8, 8, false);
             const surfMat = new THREE.MeshBasicMaterial({
                 color: 0x38bdf8,
                 transparent: true,
-                opacity: 0.55
+                opacity: 0.75
             });
             const surfMesh = new THREE.Mesh(surfGeom, surfMat);
             scene.add(surfMesh);
@@ -2909,17 +3132,17 @@
             seaCanvas.width = 320;
             seaCanvas.height = 90;
             const sCtx = seaCanvas.getContext("2d");
-            sCtx.fillStyle = "rgba(56, 189, 248, 0.85)";
+            sCtx.fillStyle = "rgba(56, 189, 248, 0.90)";
             sCtx.font = "italic 700 24px 'Inter', sans-serif";
             sCtx.textAlign = "center";
             sCtx.fillText("ARABIAN SEA", 160, 42);
-            sCtx.fillStyle = "rgba(148, 163, 184, 0.7)";
+            sCtx.fillStyle = "rgba(148, 163, 184, 0.75)";
             sCtx.font = "500 12px 'Inter', sans-serif";
             sCtx.fillText("Kerala Western Maritime Coastline", 160, 64);
             const seaTexture = new THREE.CanvasTexture(seaCanvas);
-            const seaSpriteMat = new THREE.SpriteMaterial({ map: seaTexture, transparent: true, opacity: 0.82 });
+            const seaSpriteMat = new THREE.SpriteMaterial({ map: seaTexture, transparent: true, opacity: 0.85 });
             const seaSprite = new THREE.Sprite(seaSpriteMat);
-            seaSprite.position.set(-68, -12, 3);
+            seaSprite.position.set(-72, -14, 3);
             seaSprite.scale.set(26, 7.3, 1);
             scene.add(seaSprite);
         }
@@ -2968,16 +3191,16 @@
             const riverMat = new THREE.MeshStandardMaterial({
                 color: 0x38bdf8,
                 emissive: 0x0284c7,
-                emissiveIntensity: 0.75,
+                emissiveIntensity: 0.82,
                 roughness: 0.12,
                 metalness: 0.85,
                 transparent: true,
-                opacity: 0.92
+                opacity: 0.95
             });
 
             KERALA_RIVERS.forEach(r => {
                 const curve = new THREE.CatmullRomCurve3(r.points);
-                const tubeGeom = new THREE.TubeGeometry(curve, 36, 0.85, 8, false);
+                const tubeGeom = new THREE.TubeGeometry(curve, 36, 0.9, 8, false);
                 const tubeMesh = new THREE.Mesh(tubeGeom, riverMat);
                 tubeMesh.name = r.name;
                 parentGroup.add(tubeMesh);
@@ -3004,41 +3227,33 @@
             renderer3D.toneMappingExposure = 1.25;
             container.appendChild(renderer3D.domElement);
 
-            // Orbit Controls
+            // Orbit Controls with Non-Trapping Scrolling Configuration
             controls3D = new THREE.OrbitControls(camera3D, renderer3D.domElement);
             controls3D.enableDamping = true;
             controls3D.dampingFactor = 0.08;
-            controls3D.autoRotate = true;
-            controls3D.autoRotateSpeed = 0.65;
+            controls3D.enableZoom = false; // CRITICAL: Disabled so mouse wheel scrolls webpage freely!
+            controls3D.autoRotate = false; // Starts OFF for stable, easy district clicking
+            controls3D.autoRotateSpeed = 0.55;
             controls3D.maxPolarAngle = Math.PI / 2.05;
-            controls3D.minDistance = 60;
-            controls3D.maxDistance = 320;
+            controls3D.minPolarAngle = Math.PI / 10;
+            controls3D.minDistance = 65;
+            controls3D.maxDistance = 280;
             controls3D.target.set(0, 5, 0);
 
-            // Realistic Natural Tropical Lighting
-            // 1. Warm morning sunlight angling from the Western Ghats (East)
-            const sunLight = new THREE.DirectionalLight(0xfff7ed, 2.3);
+            // Realistic Natural Tropical Lighting Setup
+            const sunLight = new THREE.DirectionalLight(0xfff7ed, 2.4);
             sunLight.position.set(90, 50, 120);
             scene3D.add(sunLight);
 
-            // 2. Tropical Sky Hemisphere Light (Blue sky above, lush terrain below)
-            const hemiLight = new THREE.HemisphereLight(0xbbf7d0, 0x064e3b, 1.3);
+            const hemiLight = new THREE.HemisphereLight(0xbbf7d0, 0x064e3b, 1.25);
             scene3D.add(hemiLight);
 
-            // 3. Coastal Maritime Fill Light from the Arabian Sea (West)
-            const coastalFill = new THREE.DirectionalLight(0x38bdf8, 1.1);
+            const coastalFill = new THREE.DirectionalLight(0x38bdf8, 1.2);
             coastalFill.position.set(-80, -30, 70);
             scene3D.add(coastalFill);
 
-            // Subtle Ground Coordinate Grid
-            const gridHelper = new THREE.GridHelper(260, 26, 0x10b981, 0x0f172a);
-            gridHelper.rotation.x = Math.PI / 2;
-            gridHelper.position.z = -1.4;
-            gridHelper.material.opacity = 0.12;
-            gridHelper.material.transparent = true;
-            scene3D.add(gridHelper);
-
-            // Arabian Sea Shelf Mesh
+            // Tactical Pedestal Base & Arabian Sea
+            basePedestalMesh = createTacticalPedestal(scene3D);
             createArabianSea(scene3D);
 
             // Kerala District Group
@@ -3046,14 +3261,15 @@
             keralaGroup3D.position.set(6, -6, 0);
             scene3D.add(keralaGroup3D);
 
-            // Build Smoothly Extruded 3D Districts with Authentic Topographic Shading
+            districtTopColliders = [];
+
+            // Build Architectural 3D Extruded Districts with Topographic Shading
             Object.keys(DISTRICT_POLYGONS).forEach(name => {
-                const rawPts = DISTRICT_POLYGONS[name];
-                const smoothPts = getSmoothPolygonPoints(rawPts, 5);
+                const pts = DISTRICT_POLYGONS[name];
                 const shape = new THREE.Shape();
-                shape.moveTo(smoothPts[0][0], smoothPts[0][1]);
-                for (let i = 1; i < smoothPts.length; i++) {
-                    shape.lineTo(smoothPts[i][0], smoothPts[i][1]);
+                shape.moveTo(pts[0][0], pts[0][1]);
+                for (let i = 1; i < pts.length; i++) {
+                    shape.lineTo(pts[i][0], pts[i][1]);
                 }
                 shape.closePath();
 
@@ -3061,44 +3277,66 @@
                 const geom = new THREE.ExtrudeGeometry(shape, {
                     depth: depth,
                     bevelEnabled: true,
-                    bevelSegments: 5,
-                    steps: 2,
-                    curveSegments: 32,
-                    bevelSize: 0.85,
-                    bevelThickness: 0.85
+                    bevelSegments: 2,
+                    steps: 1,
+                    curveSegments: 16,
+                    bevelSize: 0.18,
+                    bevelThickness: 0.22
                 });
                 geom.computeVertexNormals();
 
                 const natColor = REAL_KERALA_COLORS[name] || 0x2e7d32;
-                const mat = new THREE.MeshStandardMaterial({
-                    color: natColor,
-                    roughness: 0.65,
-                    metalness: 0.12,
+
+                // Dual-Material: Topographic Cap + Architectural Dark Slate Sides
+                const topTexture = createTopographicTexture(name, natColor);
+                const topMat = new THREE.MeshStandardMaterial({
+                    map: topTexture,
+                    color: 0xffffff,
+                    roughness: 0.38,
+                    metalness: 0.18,
                     emissive: natColor,
-                    emissiveIntensity: 0.18,
-                    transparent: true,
-                    opacity: 0.96
+                    emissiveIntensity: 0.20
                 });
 
-                const mesh = new THREE.Mesh(geom, mat);
-                mesh.name = name;
-                mesh.userData = { district: name, baseZ: 0, depth: depth };
+                const sideMat = new THREE.MeshStandardMaterial({
+                    color: 0x091424,
+                    roughness: 0.72,
+                    metalness: 0.32,
+                    emissive: 0x030810,
+                    emissiveIntensity: 0.15
+                });
 
-                // Clean Demarcation Edges
-                const edgesGeom = new THREE.EdgesGeometry(geom, 24);
+                const mesh = new THREE.Mesh(geom, [topMat, sideMat]);
+                mesh.name = name;
+                mesh.userData = { district: name, baseZ: 0, depth: depth, natColor: natColor };
+
+                // Crisp Neon Edge Demarcation
+                const edgesGeom = new THREE.EdgesGeometry(geom, 28);
                 const edgeLines = new THREE.LineSegments(edgesGeom, new THREE.LineBasicMaterial({
                     color: 0x38bdf8,
                     transparent: true,
-                    opacity: 0.35,
+                    opacity: 0.55,
                     linewidth: 1
                 }));
                 mesh.add(edgeLines);
                 mesh.userData.edgeLines = edgeLines;
 
+                // Dedicated Invisible Top Planar Collider for 100% Deterministic Raycasting
+                const topShapeGeom = new THREE.ShapeGeometry(shape);
+                const topCollider = new THREE.Mesh(topShapeGeom, new THREE.MeshBasicMaterial({
+                    visible: false,
+                    side: THREE.DoubleSide
+                }));
+                topCollider.position.z = depth + 0.05;
+                topCollider.userData = { district: name, isCollider: true };
+                mesh.add(topCollider);
+                mesh.userData.topCollider = topCollider;
+                districtTopColliders.push(topCollider);
+
                 districtMeshes[name] = mesh;
                 keralaGroup3D.add(mesh);
 
-                // Add Floating 3D Topographic Label for this district
+                // Add Floating 3D Topographic Label
                 const c = getDistrictCentroid(name);
                 const elevText = `${Math.round(depth * 95)}m ASL`;
                 const sprite = createDistrictLabelSprite(name, elevText);
@@ -3110,14 +3348,14 @@
             // Flowing Kerala Rivers
             createFlowingRivers(keralaGroup3D);
 
-            // 3D Beacon for selected district
-            const beaconGeom = new THREE.ConeGeometry(2.4, 6.5, 16);
+            // 3D Holographic Inverted Beacon for Selected District
+            const beaconGeom = new THREE.ConeGeometry(2.5, 7.0, 16);
             beaconGeom.rotateX(Math.PI);
-            const beaconMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 });
+            const beaconMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
             beaconMesh = new THREE.Mesh(beaconGeom, beaconMat);
 
-            const ringGeom = new THREE.RingGeometry(3.2, 4.8, 32);
-            const ringMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, side: THREE.DoubleSide, transparent: true, opacity: 0.75 });
+            const ringGeom = new THREE.RingGeometry(3.6, 5.2, 32);
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide, transparent: true, opacity: 0.80 });
             const ringMesh = new THREE.Mesh(ringGeom, ringMat);
             beaconMesh.add(ringMesh);
             beaconMesh.userData.ring = ringMesh;
@@ -3128,14 +3366,80 @@
             raycaster3D = new THREE.Raycaster();
             mouse3D = new THREE.Vector2();
 
-            // Event Listeners
-            renderer3D.domElement.addEventListener("pointermove", on3DPointerMove);
-            renderer3D.domElement.addEventListener("click", on3DPointerClick);
-            window.addEventListener("resize", on3DResize);
+            // Setup Event Handlers (Disambiguating Drag vs Click & Non-trapping Wheel)
+            setup3DInteractions();
 
             threeInitialized = true;
             highlight3DDistrict(currentDistrict);
             animateKerala3D();
+        }
+
+        function setup3DInteractions() {
+            const dom = renderer3D.domElement;
+
+            // Track drag vs click
+            dom.addEventListener("pointerdown", (e) => {
+                pointerDownPos = { x: e.clientX, y: e.clientY, time: performance.now() };
+                isPointerDragging = false;
+            });
+
+            dom.addEventListener("pointermove", (e) => {
+                const distMoved = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+                if (distMoved > 6) {
+                    isPointerDragging = true;
+                }
+                on3DPointerMove(e);
+            });
+
+            dom.addEventListener("pointerup", (e) => {
+                const elapsed = performance.now() - pointerDownPos.time;
+                const distMoved = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+                // Trigger selection only if it was a quick, clean click (not an orbit drag)
+                if (distMoved < 6 && elapsed < 400) {
+                    on3DPointerClick(e);
+                }
+                isPointerDragging = false;
+            });
+
+            // Non-trapping wheel zoom: Zoom ONLY when Ctrl/Cmd key is pressed; otherwise allow normal page scrolling!
+            dom.addEventListener("wheel", (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    const delta = e.deltaY * 0.12;
+                    zoom3DCamera(delta);
+                }
+            }, { passive: false });
+
+            // Pause auto-rotate on hover so districts are easy to click
+            dom.addEventListener("mouseenter", () => {
+                if (controls3D && isAutoRotating) {
+                    controls3D.autoRotate = false;
+                }
+            });
+            dom.addEventListener("mouseleave", () => {
+                if (controls3D && isAutoRotating) {
+                    controls3D.autoRotate = true;
+                }
+                if (hoveredDistrict) {
+                    resetHoverMesh();
+                    hoveredDistrict = null;
+                }
+            });
+
+            window.addEventListener("resize", on3DResize);
+        }
+
+        function raycastDistrict(mouse, camera, raycaster, topColliders, labelSprites) {
+            raycaster.setFromCamera(mouse, camera);
+            const targets = [...topColliders, ...Object.values(labelSprites)];
+            const intersects = raycaster.intersectObjects(targets, false);
+            if (intersects.length > 0) {
+                const hit = intersects[0].object;
+                if (hit.userData && hit.userData.district) {
+                    return hit.userData.district;
+                }
+            }
+            return null;
         }
 
         function on3DResize() {
@@ -3176,17 +3480,13 @@
             mouse3D.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
             mouse3D.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-            raycaster3D.setFromCamera(mouse3D, camera3D);
-            const meshes = Object.values(districtMeshes);
-            const intersects = raycaster3D.intersectObjects(meshes, false);
+            const hitDistrict = raycastDistrict(mouse3D, camera3D, raycaster3D, districtTopColliders, districtLabelSprites);
 
-            if (intersects.length > 0) {
-                const hit = intersects[0].object;
-                const dName = hit.userData.district;
-                if (hoveredDistrict !== dName) {
+            if (hitDistrict) {
+                if (hoveredDistrict !== hitDistrict) {
                     resetHoverMesh();
-                    hoveredDistrict = dName;
-                    applyHoverMesh(dName);
+                    hoveredDistrict = hitDistrict;
+                    applyHoverMesh(hitDistrict);
                 }
                 renderer3D.domElement.style.cursor = "pointer";
             } else {
@@ -3194,19 +3494,33 @@
                     resetHoverMesh();
                     hoveredDistrict = null;
                 }
-                renderer3D.domElement.style.cursor = "grab";
+                renderer3D.domElement.style.cursor = isPointerDragging ? "grabbing" : "grab";
+            }
+        }
+
+        function on3DPointerClick(e) {
+            if (!renderer3D || !camera3D || !raycaster3D) return;
+            const rect = renderer3D.domElement.getBoundingClientRect();
+            mouse3D.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse3D.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+            const hitDistrict = raycastDistrict(mouse3D, camera3D, raycaster3D, districtTopColliders, districtLabelSprites);
+            if (hitDistrict) {
+                selectDistrict(hitDistrict);
             }
         }
 
         function applyHoverMesh(name) {
             const mesh = districtMeshes[name];
             if (!mesh || name === currentDistrict) return;
-            mesh.position.z = 2.4;
-            mesh.material.emissive.setHex(0x10b981);
-            mesh.material.emissiveIntensity = 0.65;
+            mesh.position.z = 2.2;
+            if (mesh.material && mesh.material[0]) {
+                mesh.material[0].emissive.setHex(0x10b981);
+                mesh.material[0].emissiveIntensity = 0.70;
+            }
             if (mesh.userData.edgeLines) {
-                mesh.userData.edgeLines.material.opacity = 0.85;
-                mesh.userData.edgeLines.material.color.setHex(0x38bdf8);
+                mesh.userData.edgeLines.material.opacity = 0.95;
+                mesh.userData.edgeLines.material.color.setHex(0x10b981);
             }
             update3DHUD(name, false);
         }
@@ -3217,34 +3531,16 @@
             if (mesh) {
                 mesh.position.z = 0;
                 const natCol = REAL_KERALA_COLORS[hoveredDistrict] || 0x2e7d32;
-                mesh.material.color.setHex(natCol);
-                mesh.material.emissive.setHex(natCol);
-                mesh.material.emissiveIntensity = 0.18;
+                if (mesh.material && mesh.material[0]) {
+                    mesh.material[0].emissive.setHex(natCol);
+                    mesh.material[0].emissiveIntensity = 0.20;
+                }
                 if (mesh.userData.edgeLines) {
-                    mesh.userData.edgeLines.material.opacity = 0.35;
+                    mesh.userData.edgeLines.material.opacity = 0.55;
                     mesh.userData.edgeLines.material.color.setHex(0x38bdf8);
                 }
             }
             update3DHUD(currentDistrict, true);
-        }
-
-        function on3DPointerClick(e) {
-            if (!renderer3D || !camera3D || !raycaster3D) return;
-            const rect = renderer3D.domElement.getBoundingClientRect();
-            mouse3D.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-            mouse3D.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-            raycaster3D.setFromCamera(mouse3D, camera3D);
-            const meshes = Object.values(districtMeshes);
-            const intersects = raycaster3D.intersectObjects(meshes, false);
-
-            if (intersects.length > 0) {
-                const hit = intersects[0].object;
-                const dName = hit.userData.district;
-                if (dName) {
-                    selectDistrict(dName);
-                }
-            }
         }
 
         function highlight3DDistrict(name) {
@@ -3258,10 +3554,10 @@
                 if (!mesh) return;
                 if (dName === name) {
                     mesh.position.z = 4.8;
-                    mesh.material.color.setHex(natCol);
-                    mesh.material.emissive.setHex(0x06b6d4);
-                    mesh.material.emissiveIntensity = 0.85;
-                    mesh.material.opacity = 1.0;
+                    if (mesh.material && mesh.material[0]) {
+                        mesh.material[0].emissive.setHex(0x06b6d4);
+                        mesh.material[0].emissiveIntensity = 0.85;
+                    }
                     if (mesh.userData.edgeLines) {
                         mesh.userData.edgeLines.material.opacity = 1.0;
                         mesh.userData.edgeLines.material.color.setHex(0x00f0ff);
@@ -3272,21 +3568,21 @@
                     }
                     if (sprite) {
                         sprite.position.set(c.x, c.y, depth + 10.5);
-                        sprite.scale.set(15, 4.45, 1);
+                        sprite.scale.set(16, 4.65, 1);
                     }
                 } else {
                     mesh.position.z = 0;
-                    mesh.material.color.setHex(natCol);
-                    mesh.material.emissive.setHex(natCol);
-                    mesh.material.emissiveIntensity = 0.18;
-                    mesh.material.opacity = 0.95;
+                    if (mesh.material && mesh.material[0]) {
+                        mesh.material[0].emissive.setHex(natCol);
+                        mesh.material[0].emissiveIntensity = 0.20;
+                    }
                     if (mesh.userData.edgeLines) {
-                        mesh.userData.edgeLines.material.opacity = 0.35;
+                        mesh.userData.edgeLines.material.opacity = 0.55;
                         mesh.userData.edgeLines.material.color.setHex(0x38bdf8);
                     }
                     if (sprite) {
                         sprite.position.set(c.x, c.y, depth + 5.5);
-                        sprite.scale.set(13, 3.86, 1);
+                        sprite.scale.set(14, 4.0, 1);
                     }
                 }
             });
@@ -3305,6 +3601,37 @@
                     ? "Active Selection • Live Telemetry Synced" 
                     : "Hovering • Click to Select & Load Taluks";
             }
+        }
+
+        function zoom3DCamera(delta) {
+            if (!camera3D || !controls3D) return;
+            const offset = camera3D.position.clone().sub(controls3D.target);
+            const dist = offset.length();
+            const newDist = Math.max(controls3D.minDistance, Math.min(controls3D.maxDistance, dist + delta));
+            offset.setLength(newDist);
+            camera3D.position.copy(controls3D.target).add(offset);
+            controls3D.update();
+        }
+
+        function zoom3DIn() { zoom3DCamera(-22); }
+        function zoom3DOut() { zoom3DCamera(22); }
+
+        function smoothFocusCamera(targetX, targetY, targetZ = 5, duration = 400) {
+            if (!controls3D || !camera3D) return;
+            const startTarget = controls3D.target.clone();
+            const destTarget = new THREE.Vector3(targetX, targetY, targetZ);
+            const startTime = performance.now();
+
+            function stepFocus(now) {
+                const p = Math.min((now - startTime) / duration, 1.0);
+                const ease = 1 - Math.pow(1 - p, 3);
+                controls3D.target.lerpVectors(startTarget, destTarget, ease);
+                controls3D.update();
+                if (p < 1.0) {
+                    requestAnimationFrame(stepFocus);
+                }
+            }
+            requestAnimationFrame(stepFocus);
         }
 
         function reset3DCamera() {
@@ -3370,41 +3697,33 @@
             resultsRenderer3D.toneMappingExposure = 1.25;
             container.appendChild(resultsRenderer3D.domElement);
 
-            // Results Orbit Controls
+            // Results Orbit Controls with non-trapping scrolling
             resultsControls3D = new THREE.OrbitControls(resultsCamera3D, resultsRenderer3D.domElement);
             resultsControls3D.enableDamping = true;
             resultsControls3D.dampingFactor = 0.08;
-            resultsControls3D.autoRotate = true;
-            resultsControls3D.autoRotateSpeed = 0.6;
+            resultsControls3D.enableZoom = false; // Does not hijack mouse wheel!
+            resultsControls3D.autoRotate = false; // Starts OFF by default
+            resultsControls3D.autoRotateSpeed = 0.55;
             resultsControls3D.maxPolarAngle = Math.PI / 2.05;
-            resultsControls3D.minDistance = 60;
-            resultsControls3D.maxDistance = 340;
+            resultsControls3D.minPolarAngle = Math.PI / 10;
+            resultsControls3D.minDistance = 65;
+            resultsControls3D.maxDistance = 320;
             resultsControls3D.target.set(0, -2, 0);
 
             // Realistic Natural Tropical Lighting
-            // 1. Warm morning sunlight angling from the Western Ghats (East)
-            const sunLight = new THREE.DirectionalLight(0xfff7ed, 2.3);
+            const sunLight = new THREE.DirectionalLight(0xfff7ed, 2.4);
             sunLight.position.set(90, 50, 120);
             resultsScene3D.add(sunLight);
 
-            // 2. Tropical Sky Hemisphere Light (Blue sky above, lush terrain below)
-            const hemiLight = new THREE.HemisphereLight(0xbbf7d0, 0x064e3b, 1.3);
+            const hemiLight = new THREE.HemisphereLight(0xbbf7d0, 0x064e3b, 1.25);
             resultsScene3D.add(hemiLight);
 
-            // 3. Coastal Maritime Fill Light from the Arabian Sea (West)
-            const coastalFill = new THREE.DirectionalLight(0x38bdf8, 1.1);
+            const coastalFill = new THREE.DirectionalLight(0x38bdf8, 1.2);
             coastalFill.position.set(-80, -30, 70);
             resultsScene3D.add(coastalFill);
 
-            // Ground Coordinate Grid
-            const gridHelper = new THREE.GridHelper(260, 26, 0x10b981, 0x0f172a);
-            gridHelper.rotation.x = Math.PI / 2;
-            gridHelper.position.z = -1.4;
-            gridHelper.material.opacity = 0.12;
-            gridHelper.material.transparent = true;
-            resultsScene3D.add(gridHelper);
-
-            // Add Western Arabian Sea Shelf & Coastline
+            // Tactical Pedestal & Arabian Sea
+            createTacticalPedestal(resultsScene3D);
             createArabianSea(resultsScene3D);
 
             // Results Kerala Group
@@ -3412,50 +3731,71 @@
             resultsKeralaGroup3D.position.set(6, -6, 0);
             resultsScene3D.add(resultsKeralaGroup3D);
 
-            // Build 14 Extruded 3D Districts with Curvilinear Smoothing & Topographic Relief
+            resultsTopColliders = [];
+
+            // Build 14 Extruded 3D Districts
             Object.keys(DISTRICT_POLYGONS).forEach(name => {
                 const pts = DISTRICT_POLYGONS[name];
-                const smoothPts = getSmoothPolygonPoints(pts, 5);
                 const shape = new THREE.Shape();
-                shape.moveTo(smoothPts[0][0], smoothPts[0][1]);
-                for (let i = 1; i < smoothPts.length; i++) shape.lineTo(smoothPts[i][0], smoothPts[i][1]);
+                shape.moveTo(pts[0][0], pts[0][1]);
+                for (let i = 1; i < pts.length; i++) shape.lineTo(pts[i][0], pts[i][1]);
                 shape.closePath();
 
                 const depth = DISTRICT_ELEVATIONS[name] || 8.0;
                 const geom = new THREE.ExtrudeGeometry(shape, {
                     depth: depth,
                     bevelEnabled: true,
-                    bevelSegments: 4,
-                    steps: 2,
-                    bevelSize: 0.8,
-                    bevelThickness: 0.7
+                    bevelSegments: 2,
+                    steps: 1,
+                    bevelSize: 0.18,
+                    bevelThickness: 0.22
                 });
                 geom.computeVertexNormals();
 
                 const natColor = REAL_KERALA_COLORS[name] || 0x2e7d32;
-                const mat = new THREE.MeshStandardMaterial({
-                    color: natColor,
-                    metalness: 0.12,
-                    roughness: 0.65,
-                    transparent: true,
-                    opacity: 0.95,
+                const topTexture = createTopographicTexture(name, natColor);
+                const topMat = new THREE.MeshStandardMaterial({
+                    map: topTexture,
+                    color: 0xffffff,
+                    metalness: 0.18,
+                    roughness: 0.38,
                     emissive: natColor,
-                    emissiveIntensity: 0.18
+                    emissiveIntensity: 0.20
                 });
 
-                const mesh = new THREE.Mesh(geom, mat);
+                const sideMat = new THREE.MeshStandardMaterial({
+                    color: 0x091424,
+                    roughness: 0.72,
+                    metalness: 0.32,
+                    emissive: 0x030810,
+                    emissiveIntensity: 0.15
+                });
+
+                const mesh = new THREE.Mesh(geom, [topMat, sideMat]);
                 mesh.name = name;
                 mesh.userData = { district: name, baseZ: 0, depth: depth, riskScore: 50, riskLevel: "Moderate" };
 
-                const edgesGeom = new THREE.EdgesGeometry(geom, 26);
+                const edgesGeom = new THREE.EdgesGeometry(geom, 28);
                 const edgeLines = new THREE.LineSegments(edgesGeom, new THREE.LineBasicMaterial({
                     color: 0x38bdf8,
                     transparent: true,
-                    opacity: 0.35,
+                    opacity: 0.55,
                     linewidth: 1
                 }));
                 mesh.add(edgeLines);
                 mesh.userData.edgeLines = edgeLines;
+
+                // Dedicated Top Collider for Results
+                const topShapeGeom = new THREE.ShapeGeometry(shape);
+                const topCollider = new THREE.Mesh(topShapeGeom, new THREE.MeshBasicMaterial({
+                    visible: false,
+                    side: THREE.DoubleSide
+                }));
+                topCollider.position.z = depth + 0.05;
+                topCollider.userData = { district: name, isCollider: true };
+                mesh.add(topCollider);
+                mesh.userData.topCollider = topCollider;
+                resultsTopColliders.push(topCollider);
 
                 resultsDistrictMeshes[name] = mesh;
                 resultsKeralaGroup3D.add(mesh);
@@ -3468,7 +3808,7 @@
                 resultsLabelSprites[name] = sprite;
             });
 
-            // Add Glowing River Lifelines
+            // Add Rivers
             createFlowingRivers(resultsKeralaGroup3D);
 
             // Translucent Pulsing Flood Surge Wave Mesh
@@ -3488,11 +3828,11 @@
             resultsKeralaGroup3D.add(resultsFloodWaveMesh);
 
             // Results 3D Beacon
-            const beaconGeom = new THREE.ConeGeometry(2.4, 7.0, 16);
+            const beaconGeom = new THREE.ConeGeometry(2.5, 7.0, 16);
             beaconGeom.rotateX(Math.PI);
             const beaconMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
             resultsBeaconMesh = new THREE.Mesh(beaconGeom, beaconMat);
-            const ringGeom = new THREE.RingGeometry(3.5, 5.2, 32);
+            const ringGeom = new THREE.RingGeometry(3.6, 5.2, 32);
             const ringMat = new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
             const ringMesh = new THREE.Mesh(ringGeom, ringMat);
             resultsBeaconMesh.add(ringMesh);
@@ -3503,9 +3843,7 @@
             resultsRaycaster3D = new THREE.Raycaster();
             resultsMouse3D = new THREE.Vector2();
 
-            resultsRenderer3D.domElement.addEventListener("pointermove", onResults3DPointerMove);
-            resultsRenderer3D.domElement.addEventListener("click", onResults3DPointerClick);
-            window.addEventListener("resize", onResults3DResize);
+            setupResults3DInteractions();
 
             results3DInitialized = true;
             animateResults3D();
@@ -3514,6 +3852,67 @@
                 renderResults3DHeatmap(currentAnalysisData);
             }
         }
+
+        function setupResults3DInteractions() {
+            const dom = resultsRenderer3D.domElement;
+
+            dom.addEventListener("pointerdown", (e) => {
+                resultsPointerDownPos = { x: e.clientX, y: e.clientY, time: performance.now() };
+                resultsIsDragging = false;
+            });
+
+            dom.addEventListener("pointermove", (e) => {
+                const distMoved = Math.hypot(e.clientX - resultsPointerDownPos.x, e.clientY - resultsPointerDownPos.y);
+                if (distMoved > 6) {
+                    resultsIsDragging = true;
+                }
+                onResults3DPointerMove(e);
+            });
+
+            dom.addEventListener("pointerup", (e) => {
+                const elapsed = performance.now() - resultsPointerDownPos.time;
+                const distMoved = Math.hypot(e.clientX - resultsPointerDownPos.x, e.clientY - resultsPointerDownPos.y);
+                if (distMoved < 6 && elapsed < 400) {
+                    onResults3DPointerClick(e);
+                }
+                resultsIsDragging = false;
+            });
+
+            // Non-trapping wheel zoom
+            dom.addEventListener("wheel", (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    const delta = e.deltaY * 0.12;
+                    zoomResultsCamera(delta);
+                }
+            }, { passive: false });
+
+            dom.addEventListener("mouseenter", () => {
+                if (resultsControls3D && resultsIsAutoRotating) {
+                    resultsControls3D.autoRotate = false;
+                }
+            });
+            dom.addEventListener("mouseleave", () => {
+                if (resultsControls3D && resultsIsAutoRotating) {
+                    resultsControls3D.autoRotate = true;
+                }
+            });
+
+            window.addEventListener("resize", onResults3DResize);
+        }
+
+        function zoomResultsCamera(delta) {
+            if (!resultsCamera3D || !resultsControls3D) return;
+            const offset = resultsCamera3D.position.clone().sub(resultsControls3D.target);
+            const dist = offset.length();
+            const newDist = Math.max(resultsControls3D.minDistance, Math.min(resultsControls3D.maxDistance, dist + delta));
+            offset.setLength(newDist);
+            resultsCamera3D.position.copy(resultsControls3D.target).add(offset);
+            resultsControls3D.update();
+        }
+
+        function zoomResultsIn() { zoomResultsCamera(-22); }
+        function zoomResultsOut() { zoomResultsCamera(22); }
 
         function onResults3DResize() {
             const container = document.getElementById("results-3d-viewport");
@@ -3615,10 +4014,11 @@
                 // If it's the active analyzed district: Elevate +7.5 and add intense beacon
                 if (name === resultsActiveDistrict) {
                     mesh.position.z = 7.5;
-                    mesh.material.color.setHex(col);
-                    mesh.material.emissive.setHex(col);
-                    mesh.material.emissiveIntensity = 0.95;
-                    mesh.material.opacity = 1.0;
+                    if (mesh.material && mesh.material[0]) {
+                        mesh.material[0].color.setHex(col);
+                        mesh.material[0].emissive.setHex(col);
+                        mesh.material[0].emissiveIntensity = 0.95;
+                    }
                     if (mesh.userData.edgeLines) {
                         mesh.userData.edgeLines.material.color.setHex(0xffffff);
                         mesh.userData.edgeLines.material.opacity = 1.0;
@@ -3645,10 +4045,11 @@
                     }
                 } else {
                     mesh.position.z = 0;
-                    mesh.material.color.setHex(col);
-                    mesh.material.emissive.setHex(emissiveCol);
-                    mesh.material.emissiveIntensity = emissiveIntensity;
-                    mesh.material.opacity = 0.94;
+                    if (mesh.material && mesh.material[0]) {
+                        mesh.material[0].color.setHex(col);
+                        mesh.material[0].emissive.setHex(emissiveCol);
+                        mesh.material[0].emissiveIntensity = emissiveIntensity;
+                    }
                     if (mesh.userData.edgeLines) {
                         mesh.userData.edgeLines.material.color.setHex(edgeCol);
                         mesh.userData.edgeLines.material.opacity = 0.45;
@@ -3664,7 +4065,7 @@
                     const newSprite = createDistrictLabelSprite(name, `${info.risk_score}% • ${info.risk_level}`);
                     newSprite.position.set(c.x, c.y, depth + extraZ + 5.5);
                     if (name === resultsActiveDistrict) {
-                        newSprite.scale.set(15, 4.45, 1);
+                        newSprite.scale.set(16, 4.65, 1);
                     }
                     resultsKeralaGroup3D.add(newSprite);
                     resultsLabelSprites[name] = newSprite;
@@ -3721,16 +4122,12 @@
             resultsMouse3D.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
             resultsMouse3D.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-            resultsRaycaster3D.setFromCamera(resultsMouse3D, resultsCamera3D);
-            const meshes = Object.values(resultsDistrictMeshes);
-            const intersects = resultsRaycaster3D.intersectObjects(meshes, false);
+            const hitDistrict = raycastDistrict(resultsMouse3D, resultsCamera3D, resultsRaycaster3D, resultsTopColliders, resultsLabelSprites);
 
-            if (intersects.length > 0) {
-                const hit = intersects[0].object;
-                const dName = hit.userData.district;
-                if (resultsHoveredDistrict !== dName) {
-                    resultsHoveredDistrict = dName;
-                    updateResults3DHUD(dName);
+            if (hitDistrict) {
+                if (resultsHoveredDistrict !== hitDistrict) {
+                    resultsHoveredDistrict = hitDistrict;
+                    updateResults3DHUD(hitDistrict);
                 }
                 resultsRenderer3D.domElement.style.cursor = "pointer";
             } else {
@@ -3738,7 +4135,7 @@
                     resultsHoveredDistrict = null;
                     updateResults3DHUD(resultsActiveDistrict);
                 }
-                resultsRenderer3D.domElement.style.cursor = "grab";
+                resultsRenderer3D.domElement.style.cursor = resultsIsDragging ? "grabbing" : "grab";
             }
         }
 
@@ -3748,19 +4145,12 @@
             resultsMouse3D.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
             resultsMouse3D.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-            resultsRaycaster3D.setFromCamera(resultsMouse3D, resultsCamera3D);
-            const meshes = Object.values(resultsDistrictMeshes);
-            const intersects = resultsRaycaster3D.intersectObjects(meshes, false);
-
-            if (intersects.length > 0) {
-                const hit = intersects[0].object;
-                const dName = hit.userData.district;
-                if (dName) {
-                    updateResults3DHUD(dName);
-                    const c = getDistrictCentroid(dName);
-                    resultsControls3D.target.set(c.x, c.y, 5);
-                    resultsControls3D.update();
-                }
+            const hitDistrict = raycastDistrict(resultsMouse3D, resultsCamera3D, resultsRaycaster3D, resultsTopColliders, resultsLabelSprites);
+            if (hitDistrict) {
+                updateResults3DHUD(hitDistrict);
+                const c = getDistrictCentroid(hitDistrict);
+                resultsControls3D.target.set(c.x, c.y, 5);
+                resultsControls3D.update();
             }
         }
 
@@ -3773,8 +4163,17 @@
             const qSelect = document.getElementById("quick-district-select");
             if (qSelect) qSelect.value = distName;
 
+            // Sync Interactive District Pills Bar
+            updateDistrictPills(distName);
+
             // Sync 3D Mesh
             highlight3DDistrict(distName);
+
+            // Smooth focus camera on selected district
+            if (controls3D && camera3D) {
+                const c = getDistrictCentroid(distName);
+                smoothFocusCamera(c.x * 0.75, c.y * 0.75, 5, 400);
+            }
 
             // Sync preset parameters and authentic Taluks for this district
             applyDistrictPreset(distName);
@@ -4470,7 +4869,6 @@ class FloodAggregationReducer:
 
             // Session 3: Animated Sector Impact
             animateNumber("s3-kpi-people", s3.people_affected);
-            animateNumber("s3-kpi-crit", s3.critical_locations);
             animateNumber("s3-kpi-agri", s3.affected_agri_ha, " ha");
             document.getElementById("s3-kpi-disrupt").innerText = s3.service_disruptions_count;
 
@@ -5067,6 +5465,7 @@ class FloodAggregationReducer:
         }
 
         window.onload = () => {
+            initDistrictPills();
             selectDistrict("Wayanad");
             fetchAnalysis("Wayanad", false);
             setTimeout(() => {

@@ -194,11 +194,13 @@
         .home-hero-centered {
             max-width: 1080px;
             margin: 0 auto;
-            padding: 65px 24px 45px;
+            padding: 70px 24px 70px;
+            min-height: calc(100vh - 80px);
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
         .hero-tag {
             display: inline-flex;
@@ -1775,59 +1777,6 @@
             </div>
         </div>
 
-        <!-- The 5 Process Containers Section (No Short Forms, Entire Algo & Code) -->
-        <div class="how-it-works-wrap">
-            <div class="section-subtitle">OUR BIG DATA APPROACH</div>
-            <h2 class="section-title">How It <span style="color: var(--cyan);">Works</span></h2>
-            <p class="section-desc">Click any container below to view the exact process explanation, mathematical model, and complete executable code.</p>
-
-            <div class="steps-grid">
-                <!-- Step 1 -->
-                <div class="step-card" onclick="openProcessModal(1)">
-                    <div class="step-icon" style="background: rgba(6, 182, 212, 0.15); color: var(--cyan);">🗄️</div>
-                    <h3>Collect &amp; Store Data</h3>
-                    <p>Historical and real-time environmental data stored in Hadoop Distributed File System</p>
-                    <div class="step-num-badge">1</div>
-                    <span class="step-click-hint">Click to inspect ↗</span>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="step-card" onclick="openProcessModal(2)">
-                    <div class="step-icon" style="background: rgba(168, 85, 247, 0.15); color: var(--violet);">⚙️</div>
-                    <h3>Process with Big Data</h3>
-                    <p>Clean and analyze using Hadoop MapReduce and Apache Spark</p>
-                    <div class="step-num-badge">2</div>
-                    <span class="step-click-hint">Click to inspect ↗</span>
-                </div>
-
-                <!-- Step 3: PREDICT CONTAINER (Entire Algo + Code) -->
-                <div class="step-card" style="border-color: rgba(6, 182, 212, 0.45); box-shadow: 0 0 22px rgba(6,182,212,0.2);" onclick="openProcessModal(3)">
-                    <div class="step-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--green);">📊</div>
-                    <h3>Predict Flood Risk</h3>
-                    <p>SCS-CN hydrologic runoff &amp; hydrodynamic wave model</p>
-                    <div class="step-num-badge">3</div>
-                    <span class="step-click-hint" style="color: #4ade80;">View Full Algo &amp; Code ↗</span>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="step-card" onclick="openProcessModal(4)">
-                    <div class="step-icon" style="background: rgba(249, 115, 22, 0.15); color: var(--orange);">👥</div>
-                    <h3>Analyze Impact</h3>
-                    <p>Estimate population, infrastructure, and agricultural consequences</p>
-                    <div class="step-num-badge">4</div>
-                    <span class="step-click-hint">Click to inspect ↗</span>
-                </div>
-
-                <!-- Step 5 -->
-                <div class="step-card" onclick="openProcessModal(5)">
-                    <div class="step-icon" style="background: rgba(236, 72, 153, 0.15); color: var(--magenta);">💡</div>
-                    <h3>Provide Insights</h3>
-                    <p>Visualize results and generate emergency recommendations for decision support</p>
-                    <div class="step-num-badge">5</div>
-                    <span class="step-click-hint">Click to inspect ↗</span>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- =================================================================== -->

@@ -1,5 +1,5 @@
 # Ignore local HTTP server from Vercel function bundle
-app.py
+local_server.py
 create_map_assets.py
 
 # Ignore large raw CSV dataset

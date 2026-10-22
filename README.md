@@ -17,7 +17,7 @@ This repository is optimized for one-click deployment on **[Vercel](https://verc
 
 ### 1. Run Web Dashboard Locally
 ```bash
-python app.py
+python local_server.py
 ```
 Open **[http://127.0.0.1:8080/](http://127.0.0.1:8080/)** in your browser.
 
